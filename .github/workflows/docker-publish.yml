@@ -31,5 +31,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: philomath5482/goapp-repo:${{ github.run_number }}
           labels: ${{ steps.meta.outputs.labels }}        
