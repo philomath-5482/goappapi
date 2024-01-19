@@ -1,20 +1,19 @@
-FROM golang:alpine
+FROM golang:alpine As build
 WORKDIR /src
-COPY go.mod /src/
-COPY go.sum /src/
-COPY main.go /src/
-COPY  *.html /src/
-RUN go build -o /src/gobuildapp
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+COPY *.go ./
+RUN CGO_ENABLED=0 GOOS=linux go build -o /src/gobuildapp
 
 
 
-FROM golang:alpine
+FROM scratch
 WORKDIR /app
-COPY go.mod /app
-COPY *.html /app
+COPY *.html ./
 COPY --from=0 /src/gobuildapp /app
 EXPOSE 8181
-CMD [ "/app/gobuildapp" ]
+ENTRYPOINT [ "/app/gobuildapp" ]
 
 
 
